@@ -43,13 +43,27 @@ export const useDelegationContract = (signer: ethers.JsonRpcSigner | null) => {
   const [stewards, setStewards] = useState<Steward[]>([]);
   const [delegationInfo, setDelegationInfo] = useState<DelegationInfo | null>(null);
   const [stats, setStats] = useState<DelegationStats | null>(null);
+  const [balance,setBalance] = useState<any>()
 
   useEffect(() => {
+    
     if (signer) {
-      const contractInstance = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer);
+      var contractInstance = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer);
       setContract(contractInstance);
       loadContractData();
     }
+
+    const Bal = async () => {
+
+        const Bal = await contractInstance.balanceOf(account)
+
+    setBalance(Bal)
+    }
+
+    // Bal()
+
+  
+
   }, [signer]);
 
   const loadContractData = async () => {
@@ -146,6 +160,7 @@ export const useDelegationContract = (signer: ethers.JsonRpcSigner | null) => {
   };
 
   return {
+    balance,
     contract,
     loading,
     stewards,
